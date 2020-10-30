@@ -1,11 +1,4 @@
-function [imgOut, iter] = FLICMCluster(imgIn, cNum, m, winSize, maxIter, thrE)
-    % convert image to grayscale
-    if (size(imgIn, 3) ~= 1)
-        gray = rgb2gray(imgIn);
-    else
-        gray = imgIn;
-    end
-    
+function [clusters, iter] = FLICMClustering(imgIn, cNum, m, winSize, maxIter, thrE)    
     % initialize the fuzzy partition matrix
     U = zeros([size(imgIn), cNum]);
     
@@ -25,16 +18,16 @@ function [imgOut, iter] = FLICMCluster(imgIn, cNum, m, winSize, maxIter, thrE)
     end
     
     % run core function of FLICM
-    [U, iter] = FLICMCore(gray, U, m, cNum, winSize, maxIter, thrE);
+    [U, iter] = FLICMCore(imgIn, U, m, cNum, winSize, maxIter, thrE);
     
     % clustering based on U
-    imgOut = zeros(size(imgIn));
+    clusters = zeros(size(imgIn));
     
     for r = 1:size(imgIn, 1)
         for c = 1:size(imgIn, 2)
             [uMax, class] = max(U(r, c, :)); 
             
-            imgOut(r, c) = double(class) / double(cNum);
+            clusters(r, c) = class;
         end
     end
 end
