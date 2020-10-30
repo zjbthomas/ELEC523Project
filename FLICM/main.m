@@ -28,19 +28,10 @@ function main()
     % TODO: enhancement
     
     % TODO: skull stripping
-    %mask = zeros(size(imgIn));
-    %for r = 1:size(imgIn, 1)
-    %    for c = 1:size(imgIn, 2)
-    %        if (imgIn(r, c) >= 0.1 && imgIn(r, c) <= 0.88)
-    %            mask(r, c) = 1;
-    %        end
-    %    end
-    %end
+    imgIn = skullStrip(imgIn);
     
-    %imgIn = imgIn .* mask;
-    
-    %figure;
-    %imshow(imgIn);
+    figure;
+    imshow(imgIn);
     
     % run FLICM
     clusters = FLICM(imgIn, cNum);

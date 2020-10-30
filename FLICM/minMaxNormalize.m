@@ -1,4 +1,4 @@
-% this is obtained from https://github.com/chengjun583/brainTumorRetrieval/blob/9d2949a230e45a25f8be1b6f608cb9bf026c96e6/minMaxNormalize.m
+% adapted from https://github.com/chengjun583/brainTumorRetrieval/blob/9d2949a230e45a25f8be1b6f608cb9bf026c96e6/minMaxNormalize.m
 function imNor = minMaxNormalize(im)
     % Normalize im into the range of [0, 1] using min-max normalization
 
