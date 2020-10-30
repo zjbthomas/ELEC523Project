@@ -27,7 +27,7 @@ function main()
     
     % TODO: enhancement
     
-    % TODO: skull stripping
+    % skull stripping
     imgIn = skullStrip(imgIn);
     
     figure;
@@ -55,17 +55,21 @@ function main()
         end
     end
     
-    % TBD: morphological operation to remove skull
-    
-    % overlay
-    imgOut = imgIn;
+    mask = zeros(size(clusters));
     for r = 1:size(clusters, 1)
         for c = 1:size(clusters, 2)
             if (clusters(r,c) == kMax)
-                imgOut(r, c) = 1.0;
+                mask(r, c) = 1.0;
             end
         end
     end
+    
+    % morphological operation
+    se = strel('disk', 8);
+    openMask = imopen(mask, se);
+    
+    % overlay
+    imgOut = imgIn .* openMask;
     
     figure;
     imshow(imgOut);
