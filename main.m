@@ -5,7 +5,6 @@ function main()
     clc;
 
     %% constants
-    cNum = 4; % number of clusters
     dataset = 'brats'; % cjdata; brats;
     method = 'flicm'; % otsu; flicm;
     
@@ -20,7 +19,7 @@ function main()
             imgPath = 'E:\Users\Dexaint\Downloads\1766-153.mat';
             [normImg, procImg, oriMask] = readCjdata(imgPath);
         case 'brats'
-            [normImg, oriMask] = readNII('E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_t2.nii' ...
+            [normImg, oriMask] = readNII('E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_flair.nii' ...
             , 'E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_seg.nii');
         otherwise
             error('Incorrect dataset!');
@@ -34,7 +33,7 @@ function main()
         case 'otsu'
             normMask = Otsu(normImg);
         case 'flicm'
-            normMask = FLICM(normImg, cNum);
+            normMask = FLICM(normImg);
         otherwise
             error('Incorrect method!');
     end
@@ -56,7 +55,7 @@ function main()
             case 'otsu'
                 procMask = Otsu(procImg);
             case 'flicm'
-                procMask = FLICM(procImg, cNum);
+                procMask = FLICM(procImg);
             otherwise
                 error('Incorrect method!');
         end

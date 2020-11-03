@@ -1,5 +1,6 @@
-function mask = FLICM(img, cNum)
+function mask = FLICM(img)
     %% parameters
+    cNum = 4; % number of clusters
     m = 2; 
     winSize = 3; % size of windows
     maxIter = 200; % number of iterations
