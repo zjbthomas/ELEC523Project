@@ -6,7 +6,7 @@ function main()
 
     %% constants
     dataset = 'brats'; % cjdata; brats;
-    method = 'flicm'; % otsu; flicm;
+    method = 'otsu'; % otsu; flicm;
     
     %% figure handle
     figure;
@@ -17,10 +17,11 @@ function main()
         case 'cjdata'
             %imgPath = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\1512427\brainTumorDataPublic_1-766\1.mat';
             imgPath = 'E:\Users\Dexaint\Downloads\1766-153.mat';
-            [normImg, procImg, oriMask] = readCjdata(imgPath);
+            [oriImg, procImg, oriMask] = readCjdata(imgPath, method);
         case 'brats'
-            [normImg, oriMask] = readNII('E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_flair.nii' ...
-            , 'E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_seg.nii');
+            [oriImg, oriMask] = readNII('E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_flair.nii', ...
+                'E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\BraTS19_CBICA_AAB_1\BraTS19_CBICA_AAB_1_seg.nii', ...
+                method);
         otherwise
             error('Incorrect dataset!');
     end
@@ -31,21 +32,18 @@ function main()
     %% segmentation
     switch method
         case 'otsu'
-            normMask = Otsu(normImg);
+            mask = Otsu(oriImg);
         case 'flicm'
-            normMask = FLICM(normImg);
+            mask = FLICM(oriImg);
         otherwise
             error('Incorrect method!');
     end
     
-    % overlay
-    normImgOut = normMask;
-    
     switch dataset
         case 'cjdata'
-            subplot(2, 3, 4), imshow(normImgOut); title('Proc. Mask');
+            subplot(2, 3, 4), imshow(mask); title('Proc. Mask');
         case 'brats'
-            subplot(1, 3, 3), imshow(normImgOut); title('Proc. Mask');
+            subplot(1, 3, 3), imshow(mask); title('Proc. Mask');
     end
     
     
@@ -59,10 +57,8 @@ function main()
             otherwise
                 error('Incorrect method!');
         end
-        
-        % overlay
-        procImgOut = procMask;
-        subplot(2, 3, 5), imshow(procImgOut); title('Proc. Mask Skull Stipped');
+
+        subplot(2, 3, 5), imshow(procMask); title('Proc. Mask Skull Stipped');
     end
     
     %% evaluation

@@ -1,5 +1,5 @@
 % adapted from https://www.mathworks.com/matlabcentral/answers/172701-how-to-perform-skull-stripping-using-matlab
-function [imgOut] = skullStrip(grayImage)
+function mask = skullStrip(grayImage)
     % threshold to create a binary image (default: 20/255)
     binaryImage = grayImage > 0.08; 
 
@@ -11,9 +11,5 @@ function [imgOut] = skullStrip(grayImage)
 
     % erode away pixels (default: 15)
     se = strel('disk', 20, 0);
-    binaryImage = imerode(binaryImage, se);
-
-    % mask the gray image
-    imgOut = grayImage;
-    imgOut(~binaryImage) = 0;
+    mask = imerode(binaryImage, se);
 end

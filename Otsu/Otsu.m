@@ -1,21 +1,22 @@
 function mask = Otsu(img)
     %% constants
-    % cjdata is int16 (0-32767)
+    % int16 (0-32767)
     bits = 32768;
     
-    % threashold for background removal: remove those smaller then 200 for
-    % cjdata
-    thres_bg = 200.0 / 32767.0;
+    % threashold for background removal: remove those smaller then 200
+    thres_bg = 200;
     
 	%% set the imaging editing area
-    % For the threshold method to work, the huge black background outside
-    % the head needs to be removed. 
-    % The black area can impede the threshold finding algorithm from working
-    % properly.
+    % the huge black background outside the head needs to be removed 
+
+    procImg = zeros(size(img));
+    
     for r = 1:size(img, 1)
         for c = 1:size(img, 2)
             if (img(r, c) <= thres_bg) 
-                img(r, c) = NaN;
+                procImg(r, c) = NaN;
+            else
+                procImg(r, c) = img(r, c);
             end
         end
     end
@@ -25,8 +26,8 @@ function mask = Otsu(img)
 
     for r = 1:size(img, 1)
         for c = 1:size(img, 2)
-            if isnan(img(r, c)) == 0
-                val = floor(img(r, c) * (bits - 1)) + 1;
+            if isnan(procImg(r, c)) == 0
+                val = procImg(r, c) + 1;
                 histogram(val) = histogram(val) + 1;
             end
         end
@@ -58,7 +59,7 @@ function mask = Otsu(img)
 
     for r = 1:size(img, 1)
         for c = 1:size(img, 2)
-            if img(r, c) >= double(level) / double((bits - 1))
+            if img(r, c) >= level
                 mask(r, c) = 1;
             end
         end
