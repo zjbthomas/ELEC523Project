@@ -1,6 +1,6 @@
 function mask = Otsu(img)
     %% constants
-    % cjdata is 16 bit (0-32767)
+    % cjdata is int16 (0-32767)
     bits = 32768;
     
     % threashold for background removal: remove those smaller then 200 for
@@ -26,7 +26,7 @@ function mask = Otsu(img)
     for r = 1:size(img, 1)
         for c = 1:size(img, 2)
             if isnan(img(r, c)) == 0
-                val = floor(img(r, c) * bits) + 1;
+                val = floor(img(r, c) * (bits - 1)) + 1;
                 histogram(val) = histogram(val) + 1;
             end
         end

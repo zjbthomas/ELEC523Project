@@ -40,7 +40,7 @@ function mask = FLICM(img, cNum)
     end
     
     % morphological operation
-    se = strel('disk', 10);
-    mask = imopen(mask, se);
+    %se = strel('disk', 10);
+    %mask = imopen(mask, se);
 end
 
