@@ -3,7 +3,7 @@ function mask = FLICM(img)
     cNum = 4; % number of clusters
     m = 2; 
     winSize = 3; % size of windows
-    maxIter = 200; % number of iterations
+    maxIter = 300; % number of iterations
     thrE = 0.0000001; % threshold
     
     %% run FLICM
