@@ -1,4 +1,6 @@
 function [img, mask] = readNII(imgPath, segPath, method)
+    close all;
+
     imgs = niftiread(imgPath);
     masks = niftiread(segPath);
     
