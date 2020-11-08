@@ -6,6 +6,10 @@ function mask = FLICM(img)
     maxIter = 300; % number of iterations
     thrE = 0.0000001; % threshold
     
+    % for morphological operations
+    openSize = 0;
+    closeSize = 0;
+    
     %% run FLICM
     [clusters, iter] = FLICMClustering(img, cNum, m, winSize, maxIter, thrE);
     
@@ -41,7 +45,10 @@ function mask = FLICM(img)
     end
     
     % morphological operation
-    %se = strel('disk', 10);
-    %mask = imopen(mask, se);
+    se = strel('disk', openSize);
+    mask = imopen(mask, se);
+    
+    se = strel('disk', closeSize);
+    mask = imclose(mask, se);
 end
 

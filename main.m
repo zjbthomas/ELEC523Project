@@ -4,7 +4,7 @@ function main()
     
     %% constants
     dataset = 'brats'; % cjdata; brats;
-    method = 'flicm'; % otsu; flicm;
+    method = 'otsu'; % otsu; flicm;
     
     types = {'flair', 't1', 't2'}; % type for brats
     

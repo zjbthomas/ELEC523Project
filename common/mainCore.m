@@ -35,7 +35,20 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
     end
 
     %% evaluation
+    dResult = dice(mask > 0, oriMask  > 0);    
+    jResult = jaccard(mask > 0, oriMask > 0);
+    
+    fprintf('Dice: %.4f\n',dResult);
+    fprintf('Jaccard: %.4f\n',jResult);
+    
+    if strcmp(dataset, 'cjdata')
+        dProcResult = dice(mask > 0, procMask > 0);
+        jProcResult = jaccard(mask > 0, procMask > 0);
 
+        fprintf('Dice (skull stripped): %.4f\n',dProcResult);
+        fprintf('Jaccard (skull stripped): %.4f\n',jProcResult);
+    end
+    
     %% save results    
     saveas(gcf, char(strcat(outputDir, '.jpg')));
     
