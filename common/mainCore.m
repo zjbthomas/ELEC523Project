@@ -3,6 +3,8 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
     % TODO: enhancement
 
     %% segmentation
+    tic
+    
     switch method
         case 'otsu'
             mask = Otsu(oriImg);
@@ -11,6 +13,8 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
         otherwise
             error('Incorrect method!');
     end
+    
+    fprintf('Time: %.4f\n',toc);
 
     switch dataset
         case 'cjdata'
@@ -22,6 +26,9 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
 
     % also output results after skull stripping for cjdata
     if strcmp(dataset, 'cjdata')
+        
+        tic
+        
         switch method
             case 'otsu'
                 procMask = Otsu(procImg);
@@ -30,6 +37,8 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
             otherwise
                 error('Incorrect method!');
         end
+        
+        fprintf('Time (skull stripped): %.4f\n',toc);
 
         subplot(2, 3, 5), imshow(procMask); title('Proc. Mask Skull Stipped');
     end

@@ -16,6 +16,8 @@ if (DATASET is 'cjdata'):
     dice_proc_sum = [0.0] * len(METHODS)
     jaccard_sum = [0.0] * len(METHODS)
     jaccard_proc_sum = [0.0] * len(METHODS)
+    time_sum = [0.0] * len(METHODS)
+    time_proc_sum = [0.0] * len(METHODS)
 
     # iterate over files
     for subdir, dirs, files in os.walk(RESULT_DIR):
@@ -34,14 +36,20 @@ if (DATASET is 'cjdata'):
                             if ('Dice:' in line):
                                 dice_sum[m_i] = dice_sum[m_i] + float(line.replace('Dice: ', '').replace('\n', ''))
                                 continue
-                            if ('Jaccard:' in line):
-                                jaccard_sum[m_i] = jaccard_sum[m_i] + float(line.replace('Jaccard: ', '').replace('\n', ''))
-                                continue
                             if ('Dice (skull stripped):' in line):
                                 dice_proc_sum[m_i] = dice_proc_sum[m_i] + float(line.replace('Dice (skull stripped): ', '').replace('\n', ''))
                                 continue
+                            if ('Jaccard:' in line):
+                                jaccard_sum[m_i] = jaccard_sum[m_i] + float(line.replace('Jaccard: ', '').replace('\n', ''))
+                                continue 
                             if ('Jaccard (skull stripped):' in line):
                                 jaccard_proc_sum[m_i] = jaccard_proc_sum[m_i] + float(line.replace('Jaccard (skull stripped): ', '').replace('\n', ''))
+                                continue
+                            if ('Time:' in line):
+                                time_sum[m_i] = time_sum[m_i] + float(line.replace('Time: ', '').replace('\n', ''))
+                                continue
+                            if ('Time (skull stripped):' in line):
+                                time_proc_sum[m_i] = time_proc_sum[m_i] + float(line.replace('Time (skull stripped): ', '').replace('\n', ''))
                                 continue
 
                         fin.close()
@@ -50,10 +58,14 @@ if (DATASET is 'cjdata'):
     fout = open(OUTPUT_FILE, 'w')
 
     for m_i, m_val in enumerate(METHODS):
+        fout.write('Number of images for ' + m_val + ': ' + str(results_cnt[m_i]))
         fout.write('Dice for ' + m_val + ': ' + str(dice_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Jaccard for ' + m_val + ': ' + str(jaccard_sum[m_i] / results_cnt[m_i]) + '\n')
+        fout.write('Time for ' + m_val + ': ' + str(time_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Dice (skull stripped) for ' + m_val + ': ' + str(dice_proc_sum[m_i] / results_cnt[__BuiltinMethodDescriptor__]) + '\n')
         fout.write('Jaccard (skull stripped) for ' + m_val + ': ' + str(jaccard_sum[m_i] / results_cnt[m_i]) + '\n')
+        fout.write('Time (skull stripped) for ' + m_val + ': ' + str(time_proc_sum[m_i] / results_cnt[m_i]) + '\n')
+
 
     fout.close()
 
@@ -63,6 +75,7 @@ elif (DATASET is 'brats'):
     results_cnt = [0] * len(METHODS) * len(TYPES)
     dice_sum = [0.0] * len(METHODS) * len(TYPES)
     jaccard_sum = [0.0] * len(METHODS) * len(TYPES)
+    time_sum = [0.0] * len(METHODS) * len(TYPES)
 
     # iterate over files
     for subdir, dirs, files in os.walk(RESULT_DIR):
@@ -85,6 +98,9 @@ elif (DATASET is 'brats'):
                                 if ('Jaccard:' in line):
                                     jaccard_sum[m_i * len(TYPES) + t_i] = jaccard_sum[m_i * len(TYPES) + t_i] + float(line.replace('Jaccard: ', '').replace('\n', ''))
                                     continue
+                                if ('Time:' in line):
+                                    time_sum[m_i * len(TYPES) + t_i] = time_sum[m_i * len(TYPES) + t_i] + float(line.replace('Time: ', '').replace('\n', ''))
+                                    continue
 
                             fin.close()
 
@@ -93,7 +109,9 @@ elif (DATASET is 'brats'):
 
     for m_i, m_val in enumerate(METHODS):
         for t_i, t_val in enumerate(TYPES):
+            fout.write('Number of images for ' + m_val + ' on ' + t_val + ': ' + str(results_cnt[m_i * len(TYPES) + t_i]) + '\n')
             fout.write('Dice for ' + m_val + ' on ' + t_val + ': ' + str(dice_sum[m_i * len(TYPES) + t_i] / results_cnt[m_i * len(TYPES) + t_i]) + '\n')
             fout.write('Jaccard for ' + m_val + ' on ' + t_val + ': ' + str(jaccard_sum[m_i * len(TYPES) + t_i] / results_cnt[m_i * len(TYPES) + t_i]) + '\n')
+            fout.write('Time for ' + m_val + ' on ' + t_val + ': ' + str(time_sum[m_i * len(TYPES) + t_i] / results_cnt[m_i * len(TYPES) + t_i]) + '\n')
 
     fout.close()
