@@ -1,4 +1,5 @@
 function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
+    clc;
     %% pre-processing
     % TODO: enhancement
 
@@ -61,7 +62,6 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
     %% save results    
     saveas(gcf, char(strcat(outputDir, '.jpg')));
     
-    clc;
     diary(char(strcat(outputDir, '.txt')));
 end
 
