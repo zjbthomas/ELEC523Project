@@ -1,9 +1,9 @@
 import os
 
 # parameters
-RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats\\'
-OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats.txt'
-DATASET = 'brats' # cjdata; brats
+RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata\\'
+OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata.txt'
+DATASET = 'cjdata' # cjdata; brats
 METHOD = 'flicm' # otsu; flicm
 FLICM_ITER = 300
 FLICM_THRES = 0.0000001
@@ -78,7 +78,7 @@ if (DATASET is 'cjdata'):
         fout.write('Dice for ' + m_val + ': ' + str(dice_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Jaccard for ' + m_val + ': ' + str(jaccard_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Time for ' + m_val + ': ' + str(time_sum[m_i] / results_cnt[m_i]) + '\n')
-        fout.write('Dice (skull stripped) for ' + m_val + ': ' + str(dice_proc_sum[m_i] / results_cnt[__BuiltinMethodDescriptor__]) + '\n')
+        fout.write('Dice (skull stripped) for ' + m_val + ': ' + str(dice_proc_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Jaccard (skull stripped) for ' + m_val + ': ' + str(jaccard_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Time (skull stripped) for ' + m_val + ': ' + str(time_proc_sum[m_i] / results_cnt[m_i]) + '\n')
 
