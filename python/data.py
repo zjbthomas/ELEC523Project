@@ -74,7 +74,7 @@ if (DATASET is 'cjdata'):
         if (results_cnt[m_i] == 0):
                 continue
 
-        fout.write('Number of images for ' + m_val + ': ' + str(results_cnt[m_i]))
+        fout.write('Number of images for ' + m_val + ': ' + str(results_cnt[m_i]) + '\n')
         fout.write('Dice for ' + m_val + ': ' + str(dice_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Jaccard for ' + m_val + ': ' + str(jaccard_sum[m_i] / results_cnt[m_i]) + '\n')
         fout.write('Time for ' + m_val + ': ' + str(time_sum[m_i] / results_cnt[m_i]) + '\n')
