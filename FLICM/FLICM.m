@@ -1,9 +1,9 @@
-function mask = FLICM(img)
+function mask = FLICM(dataset, img, outputDir)
     %% parameters
-    cNum = 4; % number of clusters
+    cNum = 4;
     m = 2; 
     winSize = 3; % size of windows
-    maxIter = 300; % number of iterations
+    maxIter = 500; % number of iterations
     thrE = 0.0000001; % threshold
     
     % for morphological operations
@@ -35,9 +35,12 @@ function mask = FLICM(img)
         end
     end
     
+    classes = zeros([size(clusters) cNum]);
     mask = zeros(size(clusters));
     for r = 1:size(clusters, 1)
         for c = 1:size(clusters, 2)
+            classes(r, c, clusters(r, c)) = 1.0;
+            
             if (clusters(r,c) == kMax)
                 mask(r, c) = 1.0;
             end
@@ -50,5 +53,21 @@ function mask = FLICM(img)
     
     se = strel('disk', closeSize);
     mask = imclose(mask, se);
+    
+    % save matrices
+    if strcmp(dataset, 'cjdata')
+        filename = char(strcat(outputDir, '_SS_C'));
+    else
+        filename = char(strcat(outputDir, '_C'));
+    end
+    
+    for k = 1:cNum
+        out = classes(:, :, k);
+        if (k == kMax)
+            save(strcat(filename, num2str(k), '_MAX.mat'), 'out');
+        else
+            save(strcat(filename, num2str(k), '.mat'),  'out');
+        end
+    end
 end
 
