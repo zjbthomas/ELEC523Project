@@ -3,7 +3,7 @@ function main()
     clear;
     
     %% constants
-    dataset = 'brats'; % cjdata; brats;
+    dataset = 'cjdata'; % cjdata; brats;
     method = 'flicm'; % otsu; flicm;
     
     types = {'flair', 't1', 't2'}; % type for brats
@@ -17,9 +17,9 @@ function main()
             case 'cjdata'
                 mainInit(dataset, method);
                 
-                [oriImg, procImg, oriMask] = readCjdata(imgDirs{i}, method);
+                [oriImg, procImg, oriMask, ss] = readCjdata(imgDirs{i}, method);
                 
-                mainCore(dataset, method, oriImg, procImg, oriMask, outputDirs{i});
+                mainCore(dataset, method, oriImg, procImg, oriMask, ss, outputDirs{i});
             case 'brats'
                 for t = types
                     mainInit(dataset, method);
@@ -27,10 +27,8 @@ function main()
                     [oriImg, oriMask] = readNII(char(strcat(imgDirs{i}, '_', t, '.nii.gz')), ...
                         char(strcat(imgDirs{i}, '_seg.nii.gz')), ...
                         method);
-
-                    procImg = oriImg; % just a place-holder
                     
-                    mainCore(dataset, method, oriImg, procImg, oriMask, regexprep(outputDirs{i}, '@@@', t));
+                    mainCore(dataset, method, oriImg, NaN, oriMask, NaN, regexprep(outputDirs{i}, '@@@', t));
                 end
             otherwise
                 error('Incorrect dataset!');

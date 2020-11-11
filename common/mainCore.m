@@ -1,4 +1,4 @@
-function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
+function mainCore(dataset, method, oriImg, procImg, oriMask, ss, outputDir)
     clc;
     
     %% pre-processing
@@ -35,17 +35,19 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, outputDir)
             case 'otsu'
                 procMask = Otsu(procImg);
             case 'flicm'
-                procMask = FLICM(dataset, oriImg, outputDir);
+                procMask = FLICM(dataset, procImg, outputDir);
             otherwise
                 error('Incorrect method!');
         end
         
         fprintf('Time (skull stripped): %.4f\n',toc);
 
-        subplot(2, 3, 5), imshow(procMask); title('Proc. Mask Skull Stipped');
-        
         % do skull stripping on mask
-        procOnMask = skullStrip(mask);
+        procOnMask = mask;
+        procOnMask(~ss) = 0;
+        
+        % show images
+        subplot(2, 3, 5), imshow(procMask); title('Proc. Mask Skull Stipped');
         subplot(2, 3, 6), imshow(procOnMask); title('Mask After Skull Stipped');
     end
 

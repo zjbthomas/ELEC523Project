@@ -15,6 +15,7 @@ function [img, mask] = readNII(imgPath, segPath, method)
     
     mask = minMaxNormalize(masks(:, :, pos));
     
+    % show images
     subplot(1, 3, 1), imshow(minMaxNormalize(imgs(:, :, pos))); title('Ori. Image');
     subplot(1, 3, 2), imshow(mask); title('Ori. Mask');
 end

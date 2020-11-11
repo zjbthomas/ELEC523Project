@@ -1,4 +1,4 @@
-function [img, procImg, mask] = readCjdata(imgPath, method)
+function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     load(imgPath);
     
     switch method
@@ -12,16 +12,16 @@ function [img, procImg, mask] = readCjdata(imgPath, method)
     
     mask = cjdata.tumorMask;
     
-    subplot(2, 3, 1), imshow(minMaxNormalize(cjdata.image)); title('Ori. Image');
-    subplot(2, 3, 2), imshow(mask); title('Ori. Mask');
-    
     % skull stripping
-    mask = skullStrip(minMaxNormalize(cjdata.image));
+    ss = skullStrip(minMaxNormalize(cjdata.image));
     
     % mask the gray image
     procImg = img;
-    procImg(~mask) = 0;
+    procImg(~ss) = 0;
     
+    % show images
+    subplot(2, 3, 1), imshow(minMaxNormalize(cjdata.image)); title('Ori. Image');
+    subplot(2, 3, 2), imshow(mask); title('Ori. Mask');
     switch method
         case 'otsu'
             subplot(2, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
