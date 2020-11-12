@@ -1,14 +1,15 @@
 import os
 
 # parameters
-RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata\\'
-OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata.txt'
-DATASET = 'cjdata' # cjdata; brats
+RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats\\'
+OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats.txt'
+DATASET = 'brats' # cjdata; brats
 METHOD = 'flicm' # otsu; flicm
-FLICM_ITER = 300
-FLICM_THRES = 0.0000001
+FLICM_ITER = 1000
 
 # constants
+FLICM_THRES = 0.0000000
+
 METHODS = ['otsu', 'flicm']
 TYPES = ['flair', 't1', 't2']
 
