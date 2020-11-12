@@ -4,6 +4,8 @@ function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     switch method
         case 'otsu'
             img = cjdata.image;
+        case 'fcm'
+            img = minMaxNormalize(cjdata.image); 
         case 'flicm'
             img = minMaxNormalize(cjdata.image);
         otherwise
