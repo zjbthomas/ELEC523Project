@@ -1,4 +1,4 @@
-function [U, iter] = FLICMCore(img, U, m, cNum, winSize, maxIter, thrE)
+function [U, iter, dMax] = FLICMCore(img, U, m, cNum, winSize, maxIter, thrE)
     % constants
     sStep = (winSize - 1) / 2;
     

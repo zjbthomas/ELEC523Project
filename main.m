@@ -3,8 +3,8 @@ function main()
     clear;
     
     %% constants
-    dataset = 'cjdata'; % cjdata; brats;
-    method = 'flicm'; % otsu; flicm;
+    dataset = 'brats'; % cjdata; brats;
+    method = 'fcm'; % otsu; fcm; flicm;
     
     types = {'flair', 't1', 't2'}; % type for brats
     

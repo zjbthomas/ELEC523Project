@@ -1,6 +1,6 @@
-function mask = FLICM(dataset, img, outputDir, fid)
-    %% parameters
-    cNum = 5;
+function mask = FCM(dataset, img, outputDir, fid)
+%% parameters
+    cNum = 4;
     m = 2; 
     winSize = 3; % size of windows
     maxIter = 1000; % number of iterations
@@ -10,8 +10,8 @@ function mask = FLICM(dataset, img, outputDir, fid)
     openSize = 0;
     closeSize = 0;
     
-    %% run FLICM
-    [clusters, iter, diff] = FLICMClustering(img, cNum, m, winSize, maxIter, thrE);
+    %% run FCM
+    [clusters, iter, diff] = FCMClustering(img, cNum, m, winSize, maxIter, thrE);
     
     fprintf(fid, 'Number of iteration: %d (diff: %.7f)\n', iter, diff);
     

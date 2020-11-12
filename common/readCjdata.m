@@ -25,6 +25,8 @@ function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     switch method
         case 'otsu'
             subplot(2, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
+        case 'fcm'
+            subplot(2, 3, 3), imshow(procImg); title('Skull Stripped');
         case 'flicm'
             subplot(2, 3, 3), imshow(procImg); title('Skull Stripped');
         otherwise

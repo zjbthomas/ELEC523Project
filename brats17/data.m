@@ -60,7 +60,9 @@ bratsList = { ...
 };
 
 for p = bratsList
+    % open log
     clc;
+    fid = fopen(char(strcat(resultBase, '\', p, '.txt')), 'w');
     
     % read original data
     imgDir = char(strcat(bratsBase, '\', p, '\', p));
@@ -81,12 +83,12 @@ for p = bratsList
     dResult = dice(mask > 0, oriMask  > 0);    
     jResult = jaccard(mask > 0, oriMask > 0);
     
-    fprintf('Dice: %.4f\n',dResult);
-    fprintf('Jaccard: %.4f\n',jResult);
+    fprintf(fid, 'Dice: %.4f\n',dResult);
+    fprintf(fid, 'Jaccard: %.4f\n',jResult);
     
     % save figure
     saveas(gcf, char(strcat(resultBase, '\', p, '.jpg')));
     
-    % save log
-    diary(char(strcat(resultBase, '\', p, '.txt')));
+    % close log
+    fclose(fid);
 end

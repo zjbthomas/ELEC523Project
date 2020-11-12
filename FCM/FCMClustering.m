@@ -1,4 +1,4 @@
-function [clusters, iter, diff] = FLICMClustering(imgIn, cNum, m, winSize, maxIter, thrE)    
+function [clusters, iter, diff] = FCMClustering(imgIn, cNum, m, winSize, maxIter, thrE)    
     % initialize the fuzzy partition matrix
     U = zeros([size(imgIn), cNum]);
     
@@ -17,8 +17,8 @@ function [clusters, iter, diff] = FLICMClustering(imgIn, cNum, m, winSize, maxIt
         end
     end
     
-    % run core function of FLICM
-    [U, iter, diff] = FLICMCore(imgIn, U, m, cNum, winSize, maxIter, thrE);
+    % run core function of FCM
+    [U, iter, diff] = FCMCore(imgIn, U, m, cNum, winSize, maxIter, thrE);
     
     % clustering based on U
     clusters = zeros(size(imgIn));
