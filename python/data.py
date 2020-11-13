@@ -3,7 +3,7 @@ import os
 # parameters
 RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4\\'
 OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4.txt'
-DATASET = 'brats' # cjdata; brats;
+DATASET = 'cjdata' # cjdata; brats;
 METHOD = 'flicm' # otsu; fcm; flicm;
 
 # constants
@@ -47,9 +47,9 @@ if (DATASET is 'cjdata'):
 
                 # iteration (lines 1 and 3)
                 if (offset):
-                    if (str(0.0000000) not in lines[0] or str(0.0000001) not in lines[0]):
+                    if (str(0.0000000) not in lines[0] and str(0.0000001) not in lines[0]):
                         underest_cnt = underest_cnt + 1
-                    if (str(0.0000000) not in lines[2] or str(0.0000001) not in lines[2]):
+                    if (str(0.0000000) not in lines[2] and str(0.0000001) not in lines[2]):
                         underest_proc_cnt = underest_proc_cnt + 1
                 
                 # time (lines 2/1 and line 4/2)
@@ -149,7 +149,7 @@ elif (DATASET is 'brats'):
 
                         # iteration (line 1)
                         if (offset):
-                            if (str(0.0000000) not in lines[0] or str(0.0000001) not in lines[0]):
+                            if (str(0.0000000) not in lines[0] and str(0.0000001) not in lines[0]):
                                 underest_cnt[t_i] = underest_cnt[t_i] + 1
                         
                         # time (line 2/1)
