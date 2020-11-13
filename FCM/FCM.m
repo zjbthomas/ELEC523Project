@@ -1,6 +1,5 @@
-function mask = FCM(dataset, img, outputDir, fid)
-%% parameters
-    cNum = 4;
+function mask = FCM(dataset, cNum, img, outputDir, fid)
+    %% parameters
     m = 2; 
     winSize = 3; % size of windows
     maxIter = 1000; % number of iterations

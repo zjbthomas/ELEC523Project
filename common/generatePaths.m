@@ -1,4 +1,4 @@
-function [imgDirs, outputDirs] = generatePaths(dataset, method)
+function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum)
     %% constants
     cjdataBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\1512427\brainTumorDataPublic_1-766\';
     
@@ -56,16 +56,22 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method)
         'BraTS19_CBICA_ARW_1'
     };
     
-    cjdataOutputBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\results\cjdata\';
-    bratsOutputBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\results\brats\';
+    outputBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\results\';
     
     %% create folders
-    if ~exist(cjdataOutputBase, 'dir')
-       mkdir(cjdataOutputBase)
+    switch method
+        case 'otsu'
+            outputDir = char(strcat(outputBase, '\', dataset, '_', method, '\'));
+        case 'fcm'
+            outputDir = char(strcat(outputBase, '\', dataset, '_', method, '_', num2str(cNum), '\'));
+        case 'flicm'
+            outputDir = char(strcat(outputBase, '\', dataset, '_', method, '_', num2str(cNum), '\'));
+        otherwise
+            error('Incorrect method!');
     end
     
-    if ~exist(bratsOutputBase, 'dir')
-       mkdir(bratsOutputBase)
+    if ~exist(outputDir, 'dir')
+       mkdir(outputDir)
     end
     
     %% generate paths
@@ -76,12 +82,12 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method)
         case 'cjdata'
             for i = 1:30
                 imgDirs{end + 1} = char(strcat(cjdataBase, '\', num2str(i), '.mat')); % load the mat name directly
-                outputDirs{end + 1} = char(strcat(cjdataOutputBase, '\', method, '_', num2str(i)));
+                outputDirs{end + 1} = char(strcat(outputDir, '\', method, '_', num2str(i)));
             end
         case 'brats'
             for p = bratsList
                 imgDirs{end + 1} = char(strcat(bratsBase, '\', p, '\', p)); % load the name up to the last underline
-                outputDirs{end + 1} = char(strcat(bratsOutputBase, '\', method, '_@@@_', p)); % @@@ for replacing
+                outputDirs{end + 1} = char(strcat(outputDir, '\', method, '_@@@_', p)); % @@@ for replacing
             end
         otherwise
             error('Incorrect dataset!');

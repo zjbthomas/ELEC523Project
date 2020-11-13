@@ -66,15 +66,13 @@ for p = bratsList
     
     % read original data
     imgDir = char(strcat(bratsBase, '\', p, '\', p));
-    [oriImg, oriMask] = readNII(char(strcat(imgDir, '_flair.nii.gz')), ... % type not important, use FLAIR as it is clear
+    [oriImg, oriMask, pos] = readNII(char(strcat(imgDir, '_flair.nii.gz')), ... % type not important, use FLAIR as it is clear
                         char(strcat(imgDir, '_seg.nii.gz')), ...
                         'flicm'); % method not important, use FLICM with normalization
     
     % read result
     resultNII = char(strcat(resultBase, '\', p, '.nii.gz'));
     masks = niftiread(resultNII);
-    
-    pos = ceil(size(masks, 3) / 2); % assuming the best slice is at the center
     
     mask = minMaxNormalize(masks(:, :, pos));
     subplot(1, 3, 3), imshow(mask); title('Proc. Mask');

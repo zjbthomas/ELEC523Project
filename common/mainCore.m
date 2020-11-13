@@ -1,8 +1,8 @@
-function mainCore(dataset, method, oriImg, procImg, oriMask, ss, outputDir)
+function mainCore(dataset, method, cNum, oriImg, procImg, oriMask, ss, outputDir)
     clc;
     % open log
     fid = fopen(char(strcat(outputDir, '.txt')), 'w');
-    
+
     %% pre-processing
     % TODO: enhancement
 
@@ -13,9 +13,9 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, ss, outputDir)
         case 'otsu'
             mask = Otsu(oriImg);
         case 'fcm'
-            mask = FCM(dataset, oriImg, outputDir, fid);
+            mask = FCM(dataset, cNum, oriImg, outputDir, fid);
         case 'flicm'
-            mask = FLICM(dataset, oriImg, outputDir, fid);
+            mask = FLICM(dataset, cNum, oriImg, outputDir, fid);
         otherwise
             error('Incorrect method!');
     end
@@ -39,9 +39,9 @@ function mainCore(dataset, method, oriImg, procImg, oriMask, ss, outputDir)
             case 'otsu'
                 procMask = Otsu(procImg);
             case 'fcm'
-                procMask = FCM(dataset, procImg, outputDir, fid);
+                procMask = FCM(dataset, cNum, procImg, outputDir, fid);
             case 'flicm'
-                procMask = FLICM(dataset, procImg, outputDir, fid);
+                procMask = FLICM(dataset, cNum, procImg, outputDir, fid);
             otherwise
                 error('Incorrect method!');
         end

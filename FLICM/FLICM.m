@@ -1,6 +1,5 @@
-function mask = FLICM(dataset, img, outputDir, fid)
+function mask = FLICM(dataset, cNum, img, outputDir, fid)
     %% parameters
-    cNum = 5;
     m = 2; 
     winSize = 3; % size of windows
     maxIter = 1000; % number of iterations
