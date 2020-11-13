@@ -3,8 +3,8 @@ import os
 # parameters
 RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4\\'
 OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4.txt'
-DATASET = 'cjdata' # cjdata; brats
-METHOD = 'flicm' # otsu; fcm; flicm
+DATASET = 'brats' # cjdata; brats;
+METHOD = 'flicm' # otsu; fcm; flicm;
 
 # constants
 TYPES = ['flair', 't1', 't2']
