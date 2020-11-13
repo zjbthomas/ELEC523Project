@@ -1,13 +1,13 @@
 import os
 
 # parameters
-RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4\\'
-OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_flicm_4.txt'
-DATASET = 'cjdata' # cjdata; brats;
+RESULT_DIR = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats\\'
+OUTPUT_FILE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\brats.txt'
+DATASET = 'brats' # cjdata; brats;
 METHOD = 'flicm' # otsu; fcm; flicm;
 
 # constants
-TYPES = ['flair', 't1', 't2']
+TYPES = ['flair', 't1', 't2', 't1ce']
 
 if (DATASET is 'cjdata'):
     # init

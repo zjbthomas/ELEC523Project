@@ -3,10 +3,10 @@ function main()
     clear;
     
     %% constants
-    dataset = 'brats'; % cjdata; brats;
-    method = 'fcm'; % otsu; fcm; flicm;
+    dataset = 'cjdata'; % cjdata; brats;
+    method = 'otsu'; % otsu; fcm; flicm;
     
-    types = {'flair', 't1', 't2'}; % type for brats
+    types = {'flair', 't1', 't2', 't1ce'}; % type for brats
     
     %% generate paths
     [imgDirs, outputDirs] = generatePaths(dataset, method);
