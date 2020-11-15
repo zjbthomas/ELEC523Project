@@ -145,6 +145,10 @@ for d in DATASETS:
                         if filepath.endswith('.txt'):
                             for t_i, t_val in enumerate(TYPES):
                                 if (m in filename and t_val in filename):
+                                    # a filter to separate t1 and t1ce
+                                    if (t_val is 't1' and 't1ce' in filename):
+                                        continue
+
                                     # update numbers
                                     results_cnt[t_i] = results_cnt[t_i] + 1
 
