@@ -1,4 +1,4 @@
-function mainCore(dataset, method, cNum, oriImg, procImg, oriMask, ss, outputDir)
+function mainCore(dataset, method, type, cNum, oriImg, procImg, oriMask, ss, outputDir)
     clc;
     % open log
     fid = fopen(char(strcat(outputDir, '.txt')), 'w');
@@ -13,9 +13,11 @@ function mainCore(dataset, method, cNum, oriImg, procImg, oriMask, ss, outputDir
         case 'otsu'
             mask = Otsu(oriImg);
         case 'fcm'
-            mask = FCM(dataset, cNum, oriImg, outputDir, fid);
+            [mask, iter, diff] = FCM(dataset, false, type, cNum, oriImg, outputDir);
+            fprintf(fid, 'Number of iteration: %d (diff: %.7f)\n', iter, diff);
         case 'flicm'
-            mask = FLICM(dataset, cNum, oriImg, outputDir, fid);
+            [mask, iter, diff] = FLICM(dataset, false, type, cNum, oriImg, outputDir);
+            fprintf(fid, 'Number of iteration: %d (diff: %.7f)\n', iter, diff);
         otherwise
             error('Incorrect method!');
     end
@@ -39,9 +41,11 @@ function mainCore(dataset, method, cNum, oriImg, procImg, oriMask, ss, outputDir
             case 'otsu'
                 procMask = Otsu(procImg);
             case 'fcm'
-                procMask = FCM(dataset, cNum, procImg, outputDir, fid);
+                [procMask, iter, diff] = FCM(dataset, true, type, cNum, procImg, outputDir);
+                fprintf(fid, 'Number of iteration (skull stripped): %d (diff: %.7f)\n', iter, diff);
             case 'flicm'
-                procMask = FLICM(dataset, cNum, procImg, outputDir, fid);
+                [procMask, iter, diff] = FLICM(dataset, true, type, cNum, procImg, outputDir);
+                fprintf(fid, 'Number of iteration (skull stripped): %d (diff: %.7f)\n', iter, diff);
             otherwise
                 error('Incorrect method!');
         end
@@ -53,108 +57,54 @@ function mainCore(dataset, method, cNum, oriImg, procImg, oriMask, ss, outputDir
         procOnMask(~ss) = 0;
         
         % show images
-        subplot(2, 3, 5), imshow(procMask); title('Proc. Mask Skull Stipped');
-        subplot(2, 3, 6), imshow(procOnMask); title('Mask After Skull Stipped');
+        subplot(2, 3, 5), imshow(procMask); title('Image Skull Stipped');
+        subplot(2, 3, 6), imshow(procOnMask); title('Mask Skull Stipped');
     end
 
     %% evaluation
-    % use matlab function to calculate Dice and Jaccard
-    dResult = dice(mask > 0, oriMask  > 0);    
-    jResult = jaccard(mask > 0, oriMask > 0);
+    % original image
+    [d, j, TP, TN, FP, FN, dM, jM] = evaluate(mask > 0, oriMask > 0);
+    fprintf(fid, 'Dice: %.4f\n', d);
+    fprintf(fid, 'Jaccard: %.4f\n', j);
+    fprintf(fid, 'Statistics: TP = %d, TN = %d, FP = %d, FN = %d\n', TP, TN, FP, FN);
+    fprintf(fid, 'Dice (manual): %.4f\n', dM);
+    fprintf(fid, 'Jaccard (manual): %.4f\n', jM);
     
-    fprintf(fid, 'Dice: %.4f\n',dResult);
-    fprintf(fid, 'Jaccard: %.4f\n',jResult);
-    
-    if strcmp(dataset, 'cjdata')
-        dProcResult = dice(procMask > 0, oriMask > 0);
-        jProcResult = jaccard(procMask > 0, oriMask > 0);
-
-        fprintf(fid, 'Dice (skull stripped): %.4f\n', dProcResult);
-        fprintf(fid, 'Jaccard (skull stripped): %.4f\n', jProcResult);
-        
-        dOnMaskResult = dice(procOnMask > 0, oriMask > 0);
-        jOnMaskResult = jaccard(procOnMask > 0, oriMask > 0);
-        
-        fprintf(fid, 'Dice (skull stripped on mask): %.4f\n', dOnMaskResult);
-        fprintf(fid, 'Jaccard (skull stripped on mask): %.4f\n', jOnMaskResult);
-    end
-    
-    % manually calculate Dice and Jaccard (also for checking number of TPs,
-    % FPs, TNs, FNs)
-    TP_mask = 0; TN_mask = 0; FP_mask = 0; FN_mask = 0;
-    
-    if strcmp(dataset, 'cjdata')
-        TP_procMask = 0; TN_procMask = 0;
-        FP_procMask = 0; FN_procMask = 0;
-        
-        TP_procOnMask = 0; TN_procOnMask = 0;
-        FP_procOnMask = 0; FN_procOnMask = 0;
-    end
-    
-    for r = 1:size(oriMask, 1)
-        for c = 1:size(oriMask, 2)
-            % for mask
-            if (oriMask(r, c) > 0 && mask (r, c) > 0)
-                TP_mask = TP_mask + 1;
-            elseif (oriMask(r, c) == 0 && mask(r, c) == 0)
-                TN_mask = TN_mask + 1;
-            elseif (oriMask(r, c) == 0 && mask(r, c) > 0)
-                FP_mask = FP_mask + 1;
-            elseif (oriMask(r, c) > 0 && mask(r, c) == 0)
-                FN_mask = FN_mask + 1;
-            end
+    switch dataset
+        case 'cjdata'
+            % SS on image
+            [d, j, TP, TN, FP, FN, dM, jM] = evaluate(procMask > 0, oriMask > 0);
+            fprintf(fid, 'Dice (skull stripped): %.4f\n', d);
+            fprintf(fid, 'Jaccard (skull stripped): %.4f\n', j);
+            fprintf(fid, 'Statistics (skull stripped): TP = %d, TN = %d, FP = %d, FN = %d\n', TP, TN, FP, FN);
+            fprintf(fid, 'Dice (manual, skull stripped): %.4f\n', dM);
+            fprintf(fid, 'Jaccard (manual, skull stripped): %.4f\n', jM);
             
-            if strcmp(dataset, 'cjdata')
-                % for procMask
-                if (oriMask(r, c) > 0 && procMask (r, c) > 0)
-                    TP_procMask = TP_procMask + 1;
-                elseif (oriMask(r, c) == 0 && procMask(r, c) == 0)
-                    TN_procMask = TN_procMask + 1;
-                elseif (oriMask(r, c) == 0 && procMask(r, c) > 0)
-                    FP_procMask = FP_procMask + 1;
-                elseif (oriMask(r, c) > 0 && procMask(r, c) == 0)
-                    FN_procMask = FN_procMask + 1;
-                end
-                % for procOnMask
-                if (oriMask(r, c) > 0 && procOnMask (r, c) > 0)
-                    TP_procOnMask = TP_procOnMask + 1;
-                elseif (oriMask(r, c) == 0 && procOnMask(r, c) == 0)
-                    TN_procOnMask = TN_procOnMask + 1;
-                elseif (oriMask(r, c) == 0 && procOnMask(r, c) > 0)
-                    FP_procOnMask = FP_procOnMask + 1;
-                elseif (oriMask(r, c) > 0 && procOnMask(r, c) == 0)
-                    FN_procOnMask = FN_procOnMask + 1;
-                end
+            %% SS on mask
+            [d, j, TP, TN, FP, FN, dM, jM] = evaluate(procOnMask > 0, oriMask > 0);
+            fprintf(fid, 'Dice (skull stripped on mask): %.4f\n', d);
+            fprintf(fid, 'Jaccard (skull stripped on mask): %.4f\n', j);
+            fprintf(fid, 'Statistics (skull stripped on mask): TP = %d, TN = %d, FP = %d, FN = %d\n', TP, TN, FP, FN);
+            fprintf(fid, 'Dice (manual, skull stripped on mask): %.4f\n', dM);
+            fprintf(fid, 'Jaccard (manual, skull stripped on mask): %.4f\n', jM);
+        case 'brats'
+            if (strcmp(type, 't1') || strcmp(type, 't1ce'))
+                % for t1 and t1ce, test enhancing core
+                [d, j, TP, TN, FP, FN, dM, jM] = evaluate(mask > 0, oriMask == 1.0);
+            elseif (strcmp(type, 't2'))
+                % for t2, test tumor core
+                [d, j, TP, TN, FP, FN, dM, jM] = evaluate(mask > 0, (oriMask == 0.25) | (oriMask == 1.00));
             end
-        end
-    end
-    
-    fprintf(fid, 'Statistics: TP = %d, TN = %d, FP = %d, FN = %d\n', ...
-        TP_mask, TN_mask, FP_mask, FN_mask);
-    fprintf(fid, 'Dice (manual): %.4f\n', ...
-        2 * TP_mask / (2 * TP_mask + FP_mask + FN_mask));
-    fprintf(fid, 'Jaccard (manual): %.4f\n', ...
-        TP_mask / (TP_mask + FP_mask + FN_mask));
-    
-    if strcmp(dataset, 'cjdata')
-        fprintf(fid, 'Statistics (skull stripped): TP = %d, TN = %d, FP = %d, FN = %d\n', ...
-            TP_procMask, TN_procMask, FP_procMask, FN_procMask);
-        fprintf(fid, 'Dice (manual, skull stripped): %.4f\n', ...
-        2 * TP_procMask / (2 * TP_procMask + FP_procMask + FN_procMask));
-        fprintf(fid, 'Jaccard (manual, skull stripped): %.4f\n', ...
-            TP_procMask / (TP_procMask + FP_procMask + FN_procMask));
-        
-        fprintf(fid, 'Statistics (skull stripped on mask): TP = %d, TN = %d, FP = %d, FN = %d\n', ...
-            TP_procOnMask, TN_procOnMask, FP_procOnMask, FN_procOnMask);
-        fprintf(fid, 'Dice (manual, skull stripped on mask): %.4f\n', ...
-        2 * TP_procOnMask / (2 * TP_procOnMask + FP_procOnMask + FN_procOnMask));
-        fprintf(fid, 'Jaccard (manual, skull stripped on mask): %.4f\n', ...
-            TP_procOnMask / (TP_procOnMask + FP_procOnMask + FN_procOnMask));
+            fprintf(fid, 'Dice (%s): %.4f\n', type, d);
+            fprintf(fid, 'Jaccard (%s): %.4f\n', type, j);
+            fprintf(fid, 'Statistics (%s): TP = %d, TN = %d, FP = %d, FN = %d\n', type, TP, TN, FP, FN);
+            fprintf(fid, 'Dice (manual, %s): %.4f\n', type, dM);
+            fprintf(fid, 'Jaccard (manual, %s): %.4f\n', type, jM);
     end
 
     %% save results
     % figure
-    saveas(gcf, char(strcat(outputDir, '.jpg')));
+    saveas(gcf, char(strcat(outputDir, '.png')));
     % close log
     fclose(fid);
 end

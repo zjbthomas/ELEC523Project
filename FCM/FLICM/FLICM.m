@@ -1,4 +1,4 @@
-function [mask, iter, diff] = FCM(dataset, ss, type, cNum, img, outputDir)
+function [mask, iter, diff] = FLICM(dataset, ss, type, cNum, img, outputDir)
     %% parameters
     m = 2; 
     winSize = 3; % size of windows
@@ -9,10 +9,10 @@ function [mask, iter, diff] = FCM(dataset, ss, type, cNum, img, outputDir)
     openSize = 0;
     closeSize = 0;
     
-    %% run FCM
-    [clusters, iter, diff] = FCMClustering(img, cNum, m, winSize, maxIter, thrE);
+    %% run FLICM
+    [clusters, iter, diff] = FLICMClustering(img, cNum, m, winSize, maxIter, thrE);
     %% post-processing
-    mask = FCMFind(dataset, 'fcm', ss, type, cNum, img, clusters, outputDir);
+    mask = FCMFind(dataset, 'flicm', ss, type, cNum, img, clusters, outputDir);
     
     % morphological operation
     se = strel('disk', openSize);

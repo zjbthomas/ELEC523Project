@@ -26,7 +26,7 @@ function [img, mask, pos] = readNII(imgPath, segPath, method)
             error('Incorrect method!');
     end
     
-    mask = minMaxNormalize(masks(:, :, pos));
+    mask = double(masks(:, :, pos)) / 4.0;
     
     % show images
     subplot(1, 3, 1), imshow(minMaxNormalize(imgs(:, :, pos))); title('Ori. Image');

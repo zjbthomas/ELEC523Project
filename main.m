@@ -1,13 +1,12 @@
 clear;
 
 %% parameters
-datasets = {'cjdata', 'brats'}; % cjdata; brats;
-methods = {'otsu', 'fcm', 'flicm'}; % otsu; fcm; flicm;
-
-cNums = {4, 5}; % number of clusters for FCM-based
+datasets = {'brats'}; % cjdata; brats;
+methods = {'fcm', 'flicm'}; % otsu; fcm; flicm;
 
 %% constants
-types = {'flair', 't1', 't2', 't1ce'}; % type for brats
+types = {'t1', 't2', 't1ce'}; % type for brats
+cNums = {4, 5}; % number of clusters for FCM-based
 
 %% main
 for d = 1:length(datasets)
@@ -24,7 +23,7 @@ for d = 1:length(datasets)
 
                         [oriImg, procImg, oriMask, ss] = readCjdata(imgDirs{i}, methods{m});
 
-                        mainCore(datasets{d}, methods{m}, cNums{c}, oriImg, procImg, oriMask, ss, outputDirs{i});
+                        mainCore(datasets{d}, methods{m}, NaN, cNums{c}, oriImg, procImg, oriMask, ss, outputDirs{i});
                     case 'brats'
                         for t = types
                             mainInit(datasets{d}, methods{m});
@@ -33,7 +32,7 @@ for d = 1:length(datasets)
                                 char(strcat(imgDirs{i}, '_seg.nii.gz')), ...
                                 methods{m});
 
-                            mainCore(datasets{d}, methods{m}, cNums{c}, oriImg, NaN, oriMask, NaN, regexprep(outputDirs{i}, '@@@', t));
+                            mainCore(datasets{d}, methods{m}, char(t), cNums{c}, oriImg, NaN, oriMask, NaN, regexprep(outputDirs{i}, '@@@', t));
                         end
                     otherwise
                         error('Incorrect dataset!');
