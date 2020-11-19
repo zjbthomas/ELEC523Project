@@ -1,11 +1,11 @@
 clear;
 
 %% parameters
-datasets = {'brats'}; % cjdata; brats;
-methods = {'fcm', 'flicm'}; % otsu; fcm; flicm;
+datasets = {'brats', 'cjdata'}; % cjdata; brats;
+methods = {'otsu', 'fcm', 'flicm'}; % otsu; fcm; flicm;
 
 %% constants
-types = {'t1', 't2', 't1ce'}; % type for brats
+types = {'flair', 't1', 't2', 't1ce'}; % type for brats
 cNums = {4, 5}; % number of clusters for FCM-based
 
 %% main
