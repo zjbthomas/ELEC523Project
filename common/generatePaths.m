@@ -1,4 +1,4 @@
-function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum)
+function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum, resetDirs)
     %% constants
     cjdataBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\1512427\brainTumorDataPublic_1-766\';
     
@@ -58,7 +58,7 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum)
     
     outputBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\results\';
     
-    %% create folders
+    %% reset folders
     switch method
         case 'otsu'
             outputDir = char(strcat(outputBase, '\', dataset, '_', method, '\'));
@@ -70,8 +70,16 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum)
             error('Incorrect method!');
     end
     
-    if ~exist(outputDir, 'dir')
-       mkdir(outputDir)
+    if (resetDirs)
+        if exist(outputDir, 'dir')
+           rmdir(outputDir, 's')
+        end
+
+        mkdir(outputDir)
+    else
+        if ~exist(outputDir, 'dir')
+           mkdir(outputDir)
+        end
     end
     
     %% generate paths
@@ -80,7 +88,7 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum)
     
     switch dataset
         case 'cjdata'
-            for i = 1:30
+            for i = 715:744
                 imgDirs{end + 1} = char(strcat(cjdataBase, '\', num2str(i), '.mat')); % load the mat name directly
                 outputDirs{end + 1} = char(strcat(outputDir, '\', method, '_', num2str(i)));
             end

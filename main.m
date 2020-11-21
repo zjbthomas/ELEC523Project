@@ -1,8 +1,10 @@
 clear;
 
 %% parameters
-datasets = {'brats', 'cjdata'}; % cjdata; brats;
+datasets = {'brats','cjdata'}; % cjdata; brats;
 methods = {'otsu', 'fcm', 'flicm'}; % otsu; fcm; flicm;
+maxMask = false;
+resetDirs = true;
 
 %% constants
 types = {'flair', 't1', 't2', 't1ce'}; % type for brats
@@ -13,7 +15,7 @@ for d = 1:length(datasets)
     for m = 1: length(methods)
         for c = 1: length(cNums)
             % generate paths
-            [imgDirs, outputDirs] = generatePaths(datasets{d}, methods{m}, cNums{c});
+            [imgDirs, outputDirs] = generatePaths(datasets{d}, methods{m}, cNums{c}, resetDirs);
 
             %% run main core
             for i = 1:length(imgDirs)
@@ -30,7 +32,7 @@ for d = 1:length(datasets)
 
                             [oriImg, oriMask, pos] = readNII(char(strcat(imgDirs{i}, '_', t, '.nii.gz')), ...
                                 char(strcat(imgDirs{i}, '_seg.nii.gz')), ...
-                                methods{m});
+                                methods{m}, maxMask);
 
                             mainCore(datasets{d}, methods{m}, char(t), cNums{c}, oriImg, NaN, oriMask, NaN, regexprep(outputDirs{i}, '@@@', t));
                         end

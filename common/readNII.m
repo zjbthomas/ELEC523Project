@@ -1,20 +1,22 @@
-function [img, mask, pos] = readNII(imgPath, segPath, method)
+function [img, mask, pos] = readNII(imgPath, segPath, method, maxMask)
     imgs = niftiread(imgPath);
     masks = niftiread(segPath);
     
-    pos = ceil(size(imgs, 3) / 2); % assuming the best slice is at the center
-    
-    % find the maximum tumor slice
-%     pos = 1;
-%     areaMax = 0;
-%     for p = 1:size(imgs, 3)
-%         area = sum(sum(masks(:, :, p) > 0));
-%         if (area > areaMax)
-%             areaMax = area;
-%             pos = p;
-%         end
-%     end
-    
+    if (~maxMask)
+        pos = ceil(size(imgs, 3) / 2); % assuming the best slice is at the center
+    else
+        % find the maximum tumor slice
+        pos = 1;
+        areaMax = 0;
+        for p = 1:size(imgs, 3)
+            area = sum(sum(masks(:, :, p) > 0));
+            if (area > areaMax)
+                areaMax = area;
+                pos = p;
+            end
+        end
+    end
+
     switch method
         case 'otsu'
             img = imgs(:, :, pos);

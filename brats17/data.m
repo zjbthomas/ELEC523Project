@@ -2,6 +2,9 @@ close all;
 clear;
 clc;
 
+%% parameters
+maxMask = false;
+
 %% constants
 bratsBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\MICCAI_BraTS_2019_Data_Training\MICCAI_BraTS_2019_Data_Training\HGG\';
 resultBase = 'E:\eDocs\PhD\Y1S1\ELEC523\Project\brats17\result19\HGG\';
@@ -68,7 +71,7 @@ for p = bratsList
     imgDir = char(strcat(bratsBase, '\', p, '\', p));
     [oriImg, oriMask, pos] = readNII(char(strcat(imgDir, '_flair.nii.gz')), ... % type not important, use FLAIR as it is clear
                         char(strcat(imgDir, '_seg.nii.gz')), ...
-                        'flicm'); % method not important, use FLICM with normalization
+                        'flicm', maxMask); % method not important, use FLICM with normalization
     
     % read result
     resultNII = char(strcat(resultBase, '\', p, '.nii.gz'));

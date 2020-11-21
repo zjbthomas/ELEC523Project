@@ -1,4 +1,4 @@
-function mask = Otsu(img)
+function masks = Otsu(img)
     %% parameters
     openSize = 0;
     closeSize = 0;
@@ -59,20 +59,22 @@ function mask = Otsu(img)
     end
 
     %% generate mask
-    mask = zeros(size(img));  % binary image editing area
+    masks = zeros([size(img), 2]);  % binary image editing area
 
     for r = 1:size(img, 1)
         for c = 1:size(img, 2)
             if img(r, c) >= level
-                mask(r, c) = 1;
+                masks(r, c, 1) = 1;
+            else
+                masks(r, c, 2) = 1;
             end
         end
     end
     
     % morphological operation
-    se = strel('disk', openSize);
-    mask = imopen(mask, se);
+    %se = strel('disk', openSize);
+    %mask = imopen(mask, se);
     
-    se = strel('disk', closeSize);
-    mask = imclose(mask, se);
+    %se = strel('disk', closeSize);
+    %mask = imclose(mask, se);
 end
