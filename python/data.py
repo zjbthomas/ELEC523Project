@@ -2,8 +2,8 @@ import os
 import re
 
 # parameters
-RESULT_BASE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\'
-DATASETS = ['cjdata', 'brats'] # cjdata; brats;
+RESULT_BASE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\cjdata_label_2\\'
+DATASETS = ['cjdata'] # cjdata; brats;
 METHODS = ['otsu', 'fcm', 'flicm'] # otsu; fcm; flicm;
 CNUMS = [4, 5]
 
@@ -76,6 +76,13 @@ for d in DATASETS:
                             if (m is 'fcm' or m is 'flicm'):
                                 offset = 1
 
+                            # mask offset
+                            if (m is 'fcm' or m is 'flicm'):
+                                match = re.search(r'mask ([0-9]+)', lines[5 + 17 * c])
+                            else:
+                                match = re.search(r'mask ([0-9]+)', lines[37])
+                            mask_offset = 17 * (int(match.group(1)) - 1)
+
                             # iteration (lines 1 and 3)
                             if (offset > 0):
                                 if (str(0.0000000) not in lines[0] and str(0.0000001) not in lines[0]):
@@ -88,29 +95,29 @@ for d in DATASETS:
                             time_proc_sum = time_proc_sum + float(lines[1 + 2 * offset].replace('Time (skull stripped): ', '').replace('\n', ''))
 
                             # Dice (lines 7/5, 12/10, and 17/15)
-                            dice_sum = dice_sum + float(lines[4 + 2 * offset].replace('Dice: ', '').replace('\n', ''))
-                            dice_proc_sum = dice_proc_sum + float(lines[9 + 2 * offset].replace('Dice (skull stripped): ', '').replace('\n', ''))
-                            dice_mask_sum = dice_mask_sum + float(lines[14 + 2 * offset].replace('Dice (skull stripped on mask): ', '').replace('\n', ''))
+                            dice_sum = dice_sum + float(lines[4 + 2 * offset + mask_offset].replace('Dice: ', '').replace('\n', ''))
+                            dice_proc_sum = dice_proc_sum + float(lines[9 + 2 * offset + mask_offset].replace('Dice (skull stripped): ', '').replace('\n', ''))
+                            dice_mask_sum = dice_mask_sum + float(lines[14 + 2 * offset + mask_offset].replace('Dice (skull stripped on mask): ', '').replace('\n', ''))
 
                             # Jaccard (lines 8/6, 13/11, 18/16)
-                            jaccard_sum = jaccard_sum + float(lines[5 + 2 * offset].replace('Jaccard: ', '').replace('\n', ''))
-                            jaccard_proc_sum = jaccard_proc_sum + float(lines[10 + 2 * offset].replace('Jaccard (skull stripped): ', '').replace('\n', ''))
-                            jaccard_mask_sum = jaccard_mask_sum + float(lines[15 + 2 * offset].replace('Jaccard (skull stripped on mask): ', '').replace('\n', ''))
+                            jaccard_sum = jaccard_sum + float(lines[5 + 2 * offset + mask_offset].replace('Jaccard: ', '').replace('\n', ''))
+                            jaccard_proc_sum = jaccard_proc_sum + float(lines[10 + 2 * offset + mask_offset].replace('Jaccard (skull stripped): ', '').replace('\n', ''))
+                            jaccard_mask_sum = jaccard_mask_sum + float(lines[15 + 2 * offset + mask_offset].replace('Jaccard (skull stripped on mask): ', '').replace('\n', ''))
 
                             # statistics (lines 9/7, 14/12, 19/17)
-                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[6 + 2 * offset])
+                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[6 + 2 * offset + mask_offset])
                             TP = TP + int(match.group(1))
                             TN = TN + int(match.group(2))
                             FP = FP + int(match.group(3))
                             FN = FN + int(match.group(4))
 
-                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[11 + 2 * offset])
+                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[11 + 2 * offset + mask_offset])
                             TP_proc = TP_proc + int(match.group(1))
                             TN_proc = TN_proc + int(match.group(2))
                             FP_proc = FP_proc + int(match.group(3))
                             FN_proc = FN_proc + int(match.group(4))
 
-                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[16 + 2 * offset])
+                            match = re.search(r'TP = ([0-9]+), TN = ([0-9]+), FP = ([0-9]+), FN = ([0-9]+)', lines[16 + 2 * offset + mask_offset])
                             TP_mask = TP_mask + int(match.group(1))
                             TN_mask = TN_mask + int(match.group(2))
                             FP_mask = FP_mask + int(match.group(3))
@@ -216,11 +223,12 @@ for d in DATASETS:
                                     if (m is 'fcm' or m is 'flicm'):
                                         offset = 1
 
-                                    # mask offset for FCM-based
-                                    mask_offset = 0
+                                    # mask offset
                                     if (m is 'fcm' or m is 'flicm'):
                                         match = re.search(r'mask ([0-9]+)', lines[3 + 12 * c])
-                                        mask_offset = 12 * (int(match.group(1)) - 1)
+                                    else:
+                                        match = re.search(r'mask ([0-9]+)', lines[26])
+                                    mask_offset = 12 * (int(match.group(1)) - 1)
 
                                     # iteration (line 1)
                                     if (offset > 0):
