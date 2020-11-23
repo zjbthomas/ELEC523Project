@@ -20,6 +20,8 @@ function [img, mask, pos] = readNII(imgPath, segPath, method, maxMask)
     switch method
         case 'otsu'
             img = imgs(:, :, pos);
+        case 'otsun'
+            img = imgs(:, :, pos);
         case 'fcm'
             img = minMaxNormalize(imgs(:, :, pos));
         case 'flicm'

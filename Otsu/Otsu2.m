@@ -1,4 +1,4 @@
-function masks = Otsu(img)
+function masks = Otsu2(img)
     %% constants
     % int16 (0-32767)
     bits = 32768;

@@ -62,6 +62,8 @@ function [imgDirs, outputDirs] = generatePaths(dataset, method, cNum, resetDirs)
     switch method
         case 'otsu'
             outputDir = char(strcat(outputBase, '\', dataset, '_', method, '\'));
+        case 'otsun'
+            outputDir = char(strcat(outputBase, '\', dataset, '_', method, '_', num2str(cNum), '\'));
         case 'fcm'
             outputDir = char(strcat(outputBase, '\', dataset, '_', method, '_', num2str(cNum), '\'));
         case 'flicm'

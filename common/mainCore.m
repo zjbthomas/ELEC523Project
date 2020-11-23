@@ -13,7 +13,9 @@ function mainCore(dataset, method, type, cNum, oriImg, procImg, oriMask, ss, use
 
         switch method
             case 'otsu'
-                masks = Otsu(oriImg);
+                masks = Otsu2(oriImg);
+            case 'otsun'
+                masks = OtsuN(dataset, false, cNum, oriImg, outputDir);
             case 'fcm'
                 [masks, iter, diff] = FCM(dataset, false, cNum, oriImg, outputDir);
                 fprintf(fid, 'Number of iteration: %d (diff: %.7f)\n', iter, diff);
@@ -28,7 +30,7 @@ function mainCore(dataset, method, type, cNum, oriImg, procImg, oriMask, ss, use
     else
         % no cache for Otsu
         if (strcmp(method, 'otsu'))
-            masks = Otsu(oriImg);
+            masks = Otsu2(oriImg);
         else
             masks = zeros([size(oriImg) cNum]);
             for k = 1:cNum
@@ -46,7 +48,9 @@ function mainCore(dataset, method, type, cNum, oriImg, procImg, oriMask, ss, use
 
             switch method
                 case 'otsu'
-                    procMasks = Otsu(procImg);
+                    procMasks = Otsu2(procImg);
+                case 'otsun'
+                    procMasks = OtsuN(dataset, true, cNum, procImg, outputDir);
                 case 'fcm'
                     [procMasks, iter, diff] = FCM(dataset, true, cNum, procImg, outputDir);
                     fprintf(fid, 'Number of iteration (skull stripped): %d (diff: %.7f)\n', iter, diff);
@@ -61,7 +65,7 @@ function mainCore(dataset, method, type, cNum, oriImg, procImg, oriMask, ss, use
         else
             % no cache for Otsu
             if (strcmp(method, 'otsu'))
-                procMasks = Otsu(procImg);
+                procMasks = Otsu2(procImg);
             else
                 procMasks = zeros([size(procImg) cNum]);
                 for k = 1:cNum

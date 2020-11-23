@@ -5,9 +5,9 @@ import math
 # parameters
 RESULT_BASE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\'
 DATASETS = ['brats', 'cjdata'] # cjdata; brats;
-METHODS = ['otsu', 'fcm', 'flicm'] # otsu; fcm; flicm;
-CNUMS = [4, 5]
-USECACHE = True
+METHODS = ['otsun'] # otsu; otsun; fcm; flicm;
+CNUMS = [5]
+USECACHE = False
 
 # constants
 TYPES = ['flair', 't1', 't2', 't1ce']
@@ -111,7 +111,7 @@ for d in DATASETS:
                                 offset = 1
 
                             # mask offset
-                            if (m is 'fcm' or m is 'flicm'):
+                            if (m is 'otsun' or m is 'fcm' or m is 'flicm'):
                                 match = re.search(r'mask ([0-9]+)', lines[offset + 32 * c])
                             else:
                                 match = re.search(r'mask ([0-9]+)', lines[offset + 64])
@@ -382,7 +382,7 @@ for d in DATASETS:
                                         offset = 1
 
                                     # mask offset
-                                    if (m is 'fcm' or m is 'flicm'):
+                                    if (m is 'otsun' or m is 'fcm' or m is 'flicm'):
                                         match = re.search(r'mask ([0-9]+)', lines[offset + 22 * c])
                                     else:
                                         match = re.search(r'mask ([0-9]+)', lines[offset + 44])

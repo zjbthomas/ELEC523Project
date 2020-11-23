@@ -4,6 +4,8 @@ function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     switch method
         case 'otsu'
             img = cjdata.image;
+        case 'otsun'
+            img = cjdata.image;
         case 'fcm'
             img = minMaxNormalize(cjdata.image); 
         case 'flicm'
@@ -26,6 +28,8 @@ function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     subplot(3, 3, 2), imshow(mask); title('Ori. Mask');
     switch method
         case 'otsu'
+            subplot(3, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
+        case 'otsun'
             subplot(3, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
         case 'fcm'
             subplot(3, 3, 3), imshow(procImg); title('Skull Stripped');

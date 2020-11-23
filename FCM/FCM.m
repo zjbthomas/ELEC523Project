@@ -8,6 +8,6 @@ function [masks, iter, diff] = FCM(dataset, ss, cNum, img, outputDir)
     %% run FCM
     [clusters, iter, diff] = FCMClustering(img, cNum, m, winSize, maxIter, thrE);
     %% post-processing
-    masks = FCMFind(dataset, ss, cNum, img, clusters, outputDir);
+    masks = SortMasks(dataset, ss, cNum, img, clusters, outputDir);
 end
 

@@ -1,4 +1,4 @@
-function masks = FCMFind(dataset, ss, cNum, img, clusters, outputDir)
+function masks = SortMasks(dataset, ss, cNum, img, clusters, outputDir)
     % use maximum average to find cluster for tumor
     sum = zeros(cNum, 1);
     count = zeros(cNum, 1);

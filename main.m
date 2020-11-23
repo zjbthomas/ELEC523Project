@@ -2,14 +2,14 @@ clear;
 
 %% parameters
 datasets = {'brats', 'cjdata'}; % cjdata; brats;
-methods = {'otsu', 'fcm', 'flicm'}; % otsu; fcm; flicm;
+methods = {'otsun'}; % otsu; otsun; fcm; flicm;
 maxMask = false;
-resetDirs = false;
-useCache = true;
+resetDirs = true;
+useCache = false;
 
 %% constants
 types = {'flair', 't1', 't2', 't1ce'}; % type for brats
-cNums = {4, 5}; % number of clusters for FCM-based
+cNums = {5}; % number of clusters
 
 %% main
 for d = 1:length(datasets)
