@@ -1,10 +1,11 @@
 clear;
 
 %% parameters
-datasets = {'brats','cjdata'}; % cjdata; brats;
+datasets = {'brats', 'cjdata'}; % cjdata; brats;
 methods = {'otsu', 'fcm', 'flicm'}; % otsu; fcm; flicm;
 maxMask = false;
-resetDirs = true;
+resetDirs = false;
+useCache = true;
 
 %% constants
 types = {'flair', 't1', 't2', 't1ce'}; % type for brats
@@ -15,7 +16,7 @@ for d = 1:length(datasets)
     for m = 1: length(methods)
         for c = 1: length(cNums)
             % generate paths
-            [imgDirs, outputDirs] = generatePaths(datasets{d}, methods{m}, cNums{c}, resetDirs);
+            [imgDirs, outputDirs] = generatePaths(datasets{d}, methods{m}, cNums{c}, resetDirs && ~useCache);
 
             %% run main core
             for i = 1:length(imgDirs)
@@ -25,7 +26,7 @@ for d = 1:length(datasets)
 
                         [oriImg, procImg, oriMask, ss] = readCjdata(imgDirs{i}, methods{m});
 
-                        mainCore(datasets{d}, methods{m}, NaN, cNums{c}, oriImg, procImg, oriMask, ss, outputDirs{i});
+                        mainCore(datasets{d}, methods{m}, NaN, cNums{c}, oriImg, procImg, oriMask, ss, useCache, outputDirs{i});
                     case 'brats'
                         for t = types
                             mainInit(datasets{d}, methods{m});
@@ -34,7 +35,7 @@ for d = 1:length(datasets)
                                 char(strcat(imgDirs{i}, '_seg.nii.gz')), ...
                                 methods{m}, maxMask);
 
-                            mainCore(datasets{d}, methods{m}, char(t), cNums{c}, oriImg, NaN, oriMask, NaN, regexprep(outputDirs{i}, '@@@', t));
+                            mainCore(datasets{d}, methods{m}, char(t), cNums{c}, oriImg, NaN, oriMask, NaN, useCache, regexprep(outputDirs{i}, '@@@', t));
                         end
                     otherwise
                         error('Incorrect dataset!');

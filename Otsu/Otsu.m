@@ -1,8 +1,4 @@
 function masks = Otsu(img)
-    %% parameters
-    openSize = 0;
-    closeSize = 0;
-
     %% constants
     % int16 (0-32767)
     bits = 32768;
@@ -70,11 +66,4 @@ function masks = Otsu(img)
             end
         end
     end
-    
-    % morphological operation
-    %se = strel('disk', openSize);
-    %mask = imopen(mask, se);
-    
-    %se = strel('disk', closeSize);
-    %mask = imclose(mask, se);
 end

@@ -22,15 +22,15 @@ function [img, procImg, mask, ss] = readCjdata(imgPath, method)
     procImg(~ss) = 0;
     
     % show images
-    subplot(2, 3, 1), imshow(minMaxNormalize(cjdata.image)); title('Ori. Image');
-    subplot(2, 3, 2), imshow(mask); title('Ori. Mask');
+    subplot(3, 3, 1), imshow(minMaxNormalize(cjdata.image)); title('Ori. Image');
+    subplot(3, 3, 2), imshow(mask); title('Ori. Mask');
     switch method
         case 'otsu'
-            subplot(2, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
+            subplot(3, 3, 3), imshow(minMaxNormalize(procImg)); title('Skull Stripped');
         case 'fcm'
-            subplot(2, 3, 3), imshow(procImg); title('Skull Stripped');
+            subplot(3, 3, 3), imshow(procImg); title('Skull Stripped');
         case 'flicm'
-            subplot(2, 3, 3), imshow(procImg); title('Skull Stripped');
+            subplot(3, 3, 3), imshow(procImg); title('Skull Stripped');
         otherwise
             error('Incorrect method!');
     end

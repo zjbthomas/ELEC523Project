@@ -3,10 +3,11 @@ import re
 import shutil
 
 # parameters
-RESULT_BASE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\middle_slice_final\\'
-DATASETS = ['brats'] # cjdata; brats;
+RESULT_BASE = 'E:\\eDocs\\PhD\\Y1S1\\ELEC523\\Project\\results\\'
+DATASETS = ['brats', 'cjdata'] # cjdata; brats;
 METHODS = ['otsu', 'fcm', 'flicm'] # otsu; fcm; flicm;
 CNUMS = [4, 5]
+USECACHE = True
 
 # constants
 TYPES = ['flair', 't1', 't2', 't1ce']
@@ -50,10 +51,19 @@ for d in DATASETS:
                             shutil.copyfile(filepath, output_dir + os.sep + filename)
 
                             # read selected mask
-                            if (m is 'fcm' or m is 'flicm'):
-                                match = re.search(r'mask ([0-9]+)', lines[5 + 17 * c])
+                            if (not USECACHE):
+                                if (m is 'fcm' or m is 'flicm'):
+                                    offset = 5
+                                else:
+                                    offset = 3
                             else:
-                                match = re.search(r'mask ([0-9]+)', lines[37])
+                                offset = 1
+
+                            # mask offset
+                            if (m is 'fcm' or m is 'flicm'):
+                                match = re.search(r'mask ([0-9]+)', lines[offset + 32 * c])
+                            else:
+                                match = re.search(r'mask ([0-9]+)', lines[offset + 64])
 
                             mask = match.group(1) # no need to convert to int
 
@@ -85,10 +95,19 @@ for d in DATASETS:
                                     shutil.copyfile(filepath, output_dir + os.sep + filename)
 
                                     # read selected mask
-                                    if (m is 'fcm' or m is 'flicm'):
-                                        match = re.search(r'mask ([0-9]+)', lines[3 + 12 * c])
+                                    if (not USECACHE):
+                                        if (m is 'fcm' or m is 'flicm'):
+                                            offset = 3
+                                        else:
+                                            offset = 2
                                     else:
-                                        match = re.search(r'mask ([0-9]+)', lines[26])
+                                        offset = 1
+
+                                    # mask offset
+                                    if (m is 'fcm' or m is 'flicm'):
+                                        match = re.search(r'mask ([0-9]+)', lines[offset + 22 * c])
+                                    else:
+                                        match = re.search(r'mask ([0-9]+)', lines[offset + 44])
 
                                     mask = match.group(1) # no need to convert to int
 
